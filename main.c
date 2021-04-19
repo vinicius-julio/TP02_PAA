@@ -84,10 +84,10 @@ int main(int argc, char** argv) {
     Labirinto *labirinto;
     inicializarLabirinto(&labirinto, num_linhas, num_colunas, &matriz_labirinto, vida,
             i_inicio, j_inicio, i_fim, j_fim);
-    imprimirLabirinto(labirinto);
-    imprimirMatrizPD(labirinto);
+    //imprimirLabirinto(labirinto);
+    //imprimirMatrizPD(labirinto);
     maxPD(labirinto);
-    imprimirMatrizPD(labirinto);
+    //imprimirMatrizPD(labirinto);
     movimentaEstudante(labirinto);
     freeLabirinto(&labirinto);
     return 0;
