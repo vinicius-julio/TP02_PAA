@@ -3,55 +3,93 @@
  * Authors: Matheus Freitas Martins (3031) / Vinicius Barbosa (3495) / Lucas Barros (3511)
  *
 */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
+#include "Labirinto.h"
 
-int main() {
-    char arquivo[25];
-    strcpy(arquivo, ""); //inicializando arquivo como vazio
-    FILE *arq = NULL;
-    int nLinhaArq, nColunaArq, pontosVida, i, j, valor;
-    int **matriz_caverna;
-    char valorAux[5];
+void teste(){
+    int i, j, num_linhas = 4, num_colunas = 5, vida = 40;
+    int i_inicio = 3, j_inicio = 4, i_fim = 1, j_fim = 0;
+    int **matriz_labirinto;
+    int aux[][5] = {        
+        {-20, 0, -20, 0, 0},
+        {0, -10, -10, -10, -10},
+        {-20, 0, 0, 0, 20},
+        {0, 0, -10, 0, 0}
+    };
+    matriz_labirinto = (int**) malloc(num_linhas*sizeof(int*));
+    for(i = 0; i < num_linhas; i++){
+        matriz_labirinto[i] = (int*) malloc(num_colunas*sizeof(int*));
+        for(j = 0; j < num_colunas; j++){
+            matriz_labirinto[i][j] = aux[i][j];
+        }
+    }    
+    Labirinto *labirinto;
+    inicializarLabirinto(&labirinto, num_linhas, num_colunas, &matriz_labirinto, vida,
+            i_inicio, j_inicio, i_fim, j_fim);
+    imprimirLabirinto(labirinto);
+    imprimirMatrizPD(labirinto);
+    maxPD(labirinto);
+    imprimirMatrizPD(labirinto);
+    movimentaEstudante(labirinto);
+    freeLabirinto(&labirinto);
+}
 
-    printf("CAVERNA\n");
-    printf("Insira o arquivo contendo as configuracoes da caverna: \n");
-    scanf("%s", arquivo);
-    arq = fopen(arquivo, "r");
-
-    while (!arq){
-        printf("Erro ao ler o arquivo! \n");
-        printf("Insira o arquivo contendo as configuracoes da caverna: \n");
-        scanf("%s", arquivo);
-        arq = fopen(arquivo, "r");
+/*
+ * 
+ */
+int main(int argc, char** argv) {
+    //teste();
+    if(argc < 2){
+        printf("Passe o nome do arquivo ao executar.\n");
+        return 0;
+    }    
+    FILE *f = NULL;
+    f = fopen(argv[1], "r");
+    if(f == NULL){
+        printf("Nao foi possivel abrir o arquivo %s.\n", argv[1]);
+        return 0;
     }
-    printf("ok\n");
-    fscanf(arq,"%d %d %d\n", &nLinhaArq, &nColunaArq, &pontosVida);
-    matriz_caverna = (int**) malloc(nLinhaArq*sizeof(int*));
-
-    for(i = 0; i < nLinhaArq; i++){
-        matriz_caverna[i] = (int*) malloc(nColunaArq*sizeof(int));
-    }
+    int i, j, num_linhas, num_colunas, vida;
+    int i_inicio, j_inicio, i_fim, j_fim;
+    char caractere;
+    int **matriz_labirinto;
+    fscanf(f, "%d", &num_linhas);
+    fscanf(f, "%d", &num_colunas);
+    fscanf(f, "%d", &vida);
     
-    i = 0;
-    j = 0;
-    //le o arquivo
-    for(i=0;i<nLinhaArq;i++) {
-        for (j = 0; j < nColunaArq; j++) {
-            fscanf(arq, "%s ", &valorAux);
-            if (strcmp(valorAux,"I")==0){ // se for a letra I, transformamos em um numero
-                valor = 1; //por exemplo, 1 representaria I
-            }else if(strcmp(valorAux,"F")==0) { //se for letra F transformamos em numero
-                valor = 2;
-            }else{
-                valor = atoi(valorAux);//converte string em int
+    matriz_labirinto = (int**) malloc(num_linhas*sizeof(int*));
+    for(i = 0; i < num_linhas; i++){
+        matriz_labirinto[i] = (int*) malloc(num_colunas*sizeof(int*));
+        for(j = 0; j < num_colunas; j++){
+            caractere = fgetc(f);            
+            if(caractere == 'I'){
+                i_inicio = i;
+                j_inicio = j;
+                matriz_labirinto[i][j] = 0;
+            } else if(caractere == 'F'){                
+                i_fim = i;
+                j_fim = j;
+                matriz_labirinto[i][j] = 0;
+            } else{
+                fseek(f, -1, SEEK_CUR); // voltando uma posicao de leitura por causa do caractere lido
+                fscanf(f, "%d", &matriz_labirinto[i][j]);
+                fgetc(f);
             }
-            matriz_caverna[i][j] = valor;
-            printf("%d ", matriz_caverna[i][j]);//testar se a impressão esta correta
         }
-        printf("\n");
-        }
+    } 
+    fclose(f);
+    Labirinto *labirinto;
+    inicializarLabirinto(&labirinto, num_linhas, num_colunas, &matriz_labirinto, vida,
+            i_inicio, j_inicio, i_fim, j_fim);
+    imprimirLabirinto(labirinto);
+    imprimirMatrizPD(labirinto);
+    maxPD(labirinto);
+    imprimirMatrizPD(labirinto);
+    movimentaEstudante(labirinto);
+    freeLabirinto(&labirinto);
     return 0;
 }
+
