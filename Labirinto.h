@@ -33,6 +33,7 @@ extern "C" {
     void imprimirLabirinto(Labirinto *labirinto);
     void imprimirMatrizConfiguracaoLabirinto(Labirinto *labirinto);
     void imprimirMatrizPD(Labirinto *labirinto);
+    int max(int a, int b);
     void maxPD(Labirinto *labirinto);
     void freeLabirinto(Labirinto **labirinto);
     void movimentaEstudante(Labirinto *labirinto);

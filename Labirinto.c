@@ -67,18 +67,38 @@ void imprimirMatrizPD(Labirinto *labirinto){
     printf("\n");
 }
 
+int max(int a, int b){
+	if(a >= b) 
+		return a;
+	return b;
+}
+
 void maxPD(Labirinto *labirinto){
-    int i, j;
-    // o +1 e para ignorar tanto a linha quanto a coluna que permaneceram com
-    // os valores de entrada. As outras linhas e colunas receberao o max da comparacao
-    for(i = labirinto->i_fim+1; i < labirinto->num_linhas; i++){
-        for(j = labirinto->j_fim+1; j < labirinto->num_colunas; j++){
-            if(labirinto->pd[i-1][j] > labirinto->pd[i][j-1])
-                labirinto->pd[i][j] += labirinto->pd[i-1][j];
-            else
-                labirinto->pd[i][j] += labirinto->pd[i][j-1];
-        }
+    int i, j, a, b;
+    for(i = labirinto->i_fim; i <= labirinto->estudante->linha; i++){
+    	for(j = labirinto->j_fim; j <= labirinto->estudante->coluna; j++){        
+    		if(i == labirinto->i_fim && j == labirinto->j_fim){
+			// nada aqui (posicao do F)
+			a = 0;
+			b = 0;
+    		} else{
+    			if(i == labirinto->i_fim){
+    				a = labirinto->pd[i][j-1];
+				b = a;
+    			} else if(j == labirinto->j_fim){
+    				a = labirinto->pd[i-1][j];
+    				b = a;
+    			} else{
+    				a = labirinto->pd[i-1][j];
+    				b = labirinto->pd[i][j-1];
+    			}
+    		}
+    		//printf("%d %d %d %d\n", a, b, i, j);
+    		labirinto->pd[i][j] = labirinto->pd[i][j] + max(a, b);
+    	}
     }
+    
+    //imprimirMatrizPD(labirinto);
 }
 
 void movimentaEstudante(Labirinto *labirinto){
@@ -91,7 +111,7 @@ void movimentaEstudante(Labirinto *labirinto){
     int i, j;
     i = labirinto->estudante->linha;
     j = labirinto->estudante->coluna;
-    if(labirinto->estudante->vida + labirinto->pd[i][j] <= 0){ // pontos de vida zerados eh impossivel sair do labirinto
+    if(labirinto->pd[i][j] <= 0){ // pontos de vida zerados eh impossivel sair do labirinto
         fprintf(f, "impossível");
         fclose(f);
         return;

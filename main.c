@@ -68,8 +68,8 @@ int main(int argc, char** argv) {
             if(caractere == 'I'){
                 i_inicio = i;
                 j_inicio = j;
-                matriz_labirinto[i][j] = 0;
-            } else if(caractere == 'F'){                
+                matriz_labirinto[i][j] = vida;
+            } else if(caractere == 'F'){
                 i_fim = i;
                 j_fim = j;
                 matriz_labirinto[i][j] = 0;
