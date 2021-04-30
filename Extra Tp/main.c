@@ -11,10 +11,10 @@ void GeraCaverna(int nLinha, int nColuna, int hpPlayer){
     srand( (unsigned)time(NULL) );
     char arquivo[25];
     FILE *arq;
-    l_Estudante = rand() % nLinha; // estudante fica em uma posição aleatoria da linha
-    c_Estudante = rand() % nColuna; // estudante fica em uma posição aleatoria da coluna
-    l_Saida = rand() % nLinha; // saida fica em uma posição aleatoria da linha
-    c_Saida = rand() % nColuna; // saida fica em uma posição aleatoria da coluna
+    l_Estudante = (int)((double)rand() / ((double)RAND_MAX + 1) * nLinha); // estudante fica em uma posição aleatoria da linha
+    c_Estudante = (int)((double)rand() / ((double)RAND_MAX + 1) * nColuna); // estudante fica em uma posição aleatoria da coluna
+    l_Saida = (int)((double)rand() / ((double)RAND_MAX + 1) * l_Estudante); // saida fica em uma posição aleatoria da linha
+    c_Saida = (int)((double)rand() / ((double)RAND_MAX + 1) * c_Estudante);// saida fica em uma posição aleatoria da coluna
     printf("Digite o nome do novo arquivo (arquivo.txt): \n");
     scanf("%s", arquivo);
     arq = fopen(arquivo, "w");
@@ -22,7 +22,7 @@ void GeraCaverna(int nLinha, int nColuna, int hpPlayer){
         printf ("Erro ao criar o arquivo.\n");
     }
     else{
-        fprintf(arq, "%d %d %d \n", nLinha, nColuna, hpPlayer);
+        fprintf(arq, "%d %d %d\n", nLinha, nColuna, hpPlayer);
         for(int i = 0; i < nLinha; i++){
             for(int j = 0; j < nColuna; j++){
                 if( i == l_Estudante && j == c_Estudante){ // escreve I na posição onde o estudante está.
@@ -34,9 +34,14 @@ void GeraCaverna(int nLinha, int nColuna, int hpPlayer){
                 else{
                     posicao = objeto[rand() % 8];
                 }
-                fprintf(arq, "%s ", posicao);
+                fprintf(arq, "%s", posicao);
+                if (j<nColuna-1){
+                    fprintf(arq, " ", posicao);
+                }
             }
-            fputc('\n', arq); //quebra de linha
+            if(i<nLinha-1) {
+                fputc('\n', arq); //quebra de linha
+            }
         }
         fclose(arq);
     }
