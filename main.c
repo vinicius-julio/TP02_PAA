@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     fscanf(f, "%d", &num_linhas);
     fscanf(f, "%d", &num_colunas);
     fscanf(f, "%d", &vida);
-    
+    fgetc(f); // tratando problema de leitura apos leitura de int
     matriz_labirinto = (int**) malloc(num_linhas*sizeof(int*));
     for(i = 0; i < num_linhas; i++){
         matriz_labirinto[i] = (int*) malloc(num_colunas*sizeof(int*));
@@ -81,6 +81,10 @@ int main(int argc, char** argv) {
         }
     } 
     fclose(f);
+    if(i_inicio < i_fim || j_inicio < j_fim){
+    	printf("O arquivo esta incoerente. A posicao inicial tem que ficar a direita e embaixo da posicao final!\n");
+    	exit(0);
+    }
     Labirinto *labirinto;
     inicializarLabirinto(&labirinto, num_linhas, num_colunas, &matriz_labirinto, vida,
             i_inicio, j_inicio, i_fim, j_fim);
