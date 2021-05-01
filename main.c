@@ -81,8 +81,9 @@ int main(int argc, char** argv) {
         }
     } 
     fclose(f);
+    //printf("%d %d %d %d\n", i_inicio, j_inicio, i_fim, j_fim);
     if(i_inicio < i_fim || j_inicio < j_fim){
-    	printf("O arquivo esta incoerente. A posicao inicial tem que ficar a direita e embaixo da posicao final!\n");
+    	printf("O arquivo esta incoerente. Impossivel encontrar caminho de I a F, caminhando apenas para esquerda e cima!\n");
     	exit(0);
     }
     Labirinto *labirinto;

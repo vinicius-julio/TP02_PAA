@@ -9,7 +9,6 @@
 
 #include "Estudante.h"
 
-#define MODOANALISE 1 // 1 para ativado 0 para desativado
 #define INICIO 0
 #define FIM 1
 
